@@ -1,62 +1,86 @@
-# 🛡️ Consent Guardian
+# Consent Guardian
 
-**Dein Schutzschild gegen Cookie-Manipulation**
+**Your Shield Against Cookie Manipulation**
 
-Überwache deine Cookie-Entscheidungen, erkenne Manipulationstricks (Dark Patterns) und behalte die Kontrolle über deine Privatsphäre.
+Monitor your cookie decisions, detect manipulation tricks (dark patterns), and stay in control of your privacy.
 
 ![Version](https://img.shields.io/badge/version-1.1.0-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
-![Made in Germany](https://img.shields.io/badge/Made%20in-Germany%20🇩🇪-black)
+![Made in Germany](https://img.shields.io/badge/Made%20in-Germany-black)
 
-## 🇬🇧 English
+## Features
 
-Monitor your cookie decisions, detect manipulation tricks, and stay in control of your privacy.
+- **Cookie Banner Detection** - Automatically detects cookie consent banners (35+ CMPs supported)
+- **Dark Pattern Analysis** - Identifies manipulation tricks like hidden reject buttons
+- **Tracker Overview** - Shows which trackers are following you (263+ known trackers with explanations)
+- **Decision Log** - Documents all your cookie decisions
+- **Bilingual** - German and English (automatically based on browser language)
+- **100% Privacy** - All data stays locally in your browser
 
----
-
-## ✨ Features
-
-- **🔍 Cookie-Banner Erkennung** - Erkennt automatisch Cookie-Banner auf Websites
-- **⚠️ Dark Pattern Analyse** - Identifiziert Manipulationstricks wie versteckte Ablehnen-Buttons
-- **📊 Tracker-Übersicht** - Zeigt welche Tracker dich verfolgen (263+ bekannte Tracker)
-- **📝 Entscheidungs-Log** - Dokumentiert alle deine Cookie-Entscheidungen
-- **🌍 Zweisprachig** - Deutsch und Englisch (automatisch nach Browsersprache)
-- **🔒 100% Privatsphäre** - Alle Daten bleiben lokal in deinem Browser
-
-## 🚀 Installation
+## Installation
 
 ### Chrome / Edge / Opera / Brave
-1. Lade die Extension von [Chrome Web Store](#) herunter
-2. Oder: Entpacke `dist/chrome` und lade als "Entpackte Erweiterung"
+1. Download from [Chrome Web Store](#) (coming soon)
+2. Or: Unpack `dist/chrome` and load as "unpacked extension"
 
 ### Firefox
-1. Lade die Extension von [Firefox Add-ons](#) herunter
-2. Oder: Lade `dist/firefox/manifest.json` als temporäre Erweiterung
+1. Download from [Firefox Add-ons](#) (coming soon)
+2. Or: Load `dist/firefox/manifest.json` as temporary extension
 
 ### Safari
-1. Verfügbar im [App Store](#) (macOS/iOS)
+1. Available on [App Store](#) (macOS/iOS) (coming soon)
 
-## 🛠️ Development
+## Detected Dark Patterns
 
-### Voraussetzungen
+Consent Guardian detects these manipulation tricks:
+
+| Pattern | Description |
+|---------|-------------|
+| **Hidden Reject** | "Reject" button is hard to find or hidden as small link |
+| **Color Manipulation** | "Accept" is colorful and large, "Reject" is gray and small |
+| **Pre-selection** | Tracking options are already checked |
+| **Confirmshaming** | Wording like "No, I don't want benefits" |
+| **Complexity** | Rejecting requires many clicks, accepting only one |
+
+## Privacy
+
+- **No Data Transfer** - All data stays locally in your browser
+- **No Accounts** - No registration required
+- **No Analytics** - We don't track you
+- **Open Source** - Code is transparent and auditable
+
+## Supported Browsers
+
+| Browser | Status | Manifest |
+|---------|--------|----------|
+| Chrome | Supported | V3 |
+| Edge | Supported | V3 (Chrome-compatible) |
+| Firefox | Supported | V2 |
+| Safari | Supported | V3 |
+| Opera | Supported | V3 (Chrome-compatible) |
+| Brave | Supported | V3 (Chrome-compatible) |
+
+## Development
+
+### Prerequisites
 - Node.js 18+
 - npm
 
 ### Setup
 ```bash
-# Dependencies installieren
+# Install dependencies
 npm install
 
-# CSS kompilieren (Tailwind)
+# Compile CSS (Tailwind)
 npm run build:css
 
-# Extension bauen
-npm run build        # Alle Browser
-npm run build:chrome # Nur Chrome
-npm run build:firefox # Nur Firefox
+# Build extension
+npm run build        # All browsers
+npm run build:chrome # Chrome only
+npm run build:firefox # Firefox only
 ```
 
-### Projektstruktur
+### Project Structure
 ```
 consent-guardian/
 ├── src/
@@ -67,73 +91,45 @@ consent-guardian/
 │   ├── lib/             # Shared Libraries
 │   ├── icons/           # Extension Icons
 │   ├── styles/          # Tailwind CSS
-│   └── _locales/        # Übersetzungen (de/en)
-├── manifests/           # Browser-spezifische Manifests
+│   └── _locales/        # Translations (de/en)
+├── manifests/           # Browser-specific Manifests
 ├── scripts/             # Build Scripts
 └── dist/                # Build Output
 ```
 
-## 📊 Erkannte Manipulationstricks
-
-Consent Guardian erkennt diese Dark Patterns:
-
-| Trick | Beschreibung |
-|-------|--------------|
-| **Versteckte Ablehnung** | "Ablehnen" ist schwer zu finden oder als kleiner Link versteckt |
-| **Farbmanipulation** | "Akzeptieren" ist bunt und groß, "Ablehnen" grau und klein |
-| **Vorauswahl** | Tracking-Optionen sind bereits angehakt |
-| **Beschämung** | Formulierungen wie "Nein, ich will keine Vorteile" |
-| **Komplexität** | Ablehnung erfordert viele Klicks, Akzeptieren nur einen |
-
-## 🔒 Datenschutz
-
-- **Keine Datenübertragung** - Alle Daten bleiben lokal im Browser
-- **Keine Accounts** - Keine Registrierung erforderlich
-- **Keine Analytics** - Wir tracken dich nicht
-- **Open Source** - Der Code ist transparent und überprüfbar
-
-## 🌐 Unterstützte Browser
-
-| Browser | Status | Manifest |
-|---------|--------|----------|
-| Chrome | ✅ | V3 |
-| Edge | ✅ | V3 (Chrome-kompatibel) |
-| Firefox | ✅ | V2 |
-| Safari | ✅ | V3 |
-| Opera | ✅ | V3 (Chrome-kompatibel) |
-| Brave | ✅ | V3 (Chrome-kompatibel) |
-
-## 📝 Changelog
+## Changelog
 
 ### v1.1.0
-- 🌍 Zweisprachig: Deutsch und Englisch
-- 📚 263+ Tracker mit detaillierten Erklärungen
-- 🎨 Verbesserte Netzwerk-Ansicht mit aufklappbaren Details
-- 🏷️ Neue Farbcodierung für bessere Übersicht
-- ⚡ Performance-Verbesserungen
+- Bilingual: German and English
+- 263+ trackers with detailed explanations
+- Improved network view with expandable details
+- New color coding for better overview
+- Performance improvements
 
 ### v1.0.0
-- 🚀 Initiale Version
-- 🔍 Cookie-Banner Erkennung
-- ⚠️ Dark Pattern Analyse
-- 📊 Tracker-Übersicht
+- Initial release
+- Cookie banner detection
+- Dark pattern analysis
+- Tracker overview
 
-## 🤝 Contributing
+## Contributing
 
-Beiträge sind willkommen! Bitte erstelle einen Issue oder Pull Request.
+Contributions are welcome! Please create an issue or pull request.
 
-## 📄 Lizenz
+## License
 
-MIT License - siehe [LICENSE](LICENSE)
+MIT License - see [LICENSE](LICENSE)
 
-## 👨‍💻 Entwickelt von
+## Author
+
+**Guido Mitschke**
 
 **Today is Life GmbH**
-Hamburg, Germany 🇩🇪
+Hamburg, Germany
 
 - Website: [todayislife.de](https://www.todayislife.de)
-- E-Mail: info@todayislife.de
+- Email: info@todayislife.de
 
 ---
 
-*Consent Guardian - Weil deine Privatsphäre wichtig ist.*
+*Consent Guardian - Because your privacy matters.*

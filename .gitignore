@@ -1,8 +1,10 @@
 # Dependencies
 node_modules/
 
-# Build output
-dist/
+# Build output (keep ZIPs for releases)
+dist/chrome/
+dist/firefox/
+dist/safari/
 
 # Test results
 test-results/

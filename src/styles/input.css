@@ -1,0 +1,114 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Consent Guardian - Custom Styles
+ * Keine externen Fonts oder Ressourcen!
+ */
+
+@layer base {
+  body {
+    @apply font-sans text-gray-900 bg-gray-50;
+  }
+}
+
+@layer components {
+  /* Score Badge */
+  .score-badge {
+    @apply inline-flex items-center px-2 py-1 rounded-full text-sm font-medium;
+  }
+
+  .score-badge-safe {
+    @apply bg-green-100 text-green-800;
+  }
+
+  .score-badge-caution {
+    @apply bg-yellow-100 text-yellow-800;
+  }
+
+  .score-badge-danger {
+    @apply bg-red-100 text-red-800;
+  }
+
+  /* Consent Type Badges */
+  .consent-badge {
+    @apply inline-flex items-center px-2 py-1 rounded text-sm font-medium;
+  }
+
+  .consent-accept-all {
+    @apply bg-red-100 text-red-800;
+  }
+
+  .consent-reject-all {
+    @apply bg-green-100 text-green-800;
+  }
+
+  .consent-custom {
+    @apply bg-yellow-100 text-yellow-800;
+  }
+
+  /* Buttons */
+  .btn {
+    @apply px-4 py-2 rounded-lg font-medium transition-colors;
+  }
+
+  .btn-primary {
+    @apply bg-blue-600 text-white hover:bg-blue-700;
+  }
+
+  .btn-secondary {
+    @apply border border-gray-300 text-gray-700 hover:bg-gray-50;
+  }
+
+  .btn-danger {
+    @apply bg-red-600 text-white hover:bg-red-700;
+  }
+
+  /* Cards */
+  .card {
+    @apply bg-white rounded-lg shadow-sm p-4;
+  }
+
+  /* Progress Bar */
+  .progress-bar {
+    @apply w-full bg-gray-200 rounded-full h-2;
+  }
+
+  .progress-bar-fill {
+    @apply h-2 rounded-full transition-all duration-300;
+  }
+
+  /* Table */
+  .data-table {
+    @apply w-full;
+  }
+
+  .data-table th {
+    @apply px-4 py-3 text-left text-sm font-medium text-gray-500 bg-gray-50;
+  }
+
+  .data-table td {
+    @apply px-4 py-3 text-sm text-gray-900;
+  }
+
+  .data-table tr {
+    @apply border-t border-gray-100;
+  }
+
+  .data-table tr:hover {
+    @apply bg-gray-50;
+  }
+}
+
+@layer utilities {
+  /* Animation für Badge-Updates */
+  .animate-pulse-once {
+    animation: pulse-once 0.5s ease-in-out;
+  }
+
+  @keyframes pulse-once {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+  }
+}

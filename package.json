@@ -1,0 +1,23 @@
+{
+  "name": "consent-guardian",
+  "version": "1.0.0",
+  "description": "Tracke und verstehe deine Cookie-Consent-Entscheidungen",
+  "private": true,
+  "scripts": {
+    "dev": "npm run watch:css",
+    "build": "npm run build:css && npm run build:ext",
+    "build:css": "tailwindcss -i ./src/styles/input.css -o ./src/styles/output.css --minify",
+    "watch:css": "tailwindcss -i ./src/styles/input.css -o ./src/styles/output.css --watch",
+    "build:ext": "node scripts/build.js",
+    "build:chrome": "node scripts/build.js chrome",
+    "build:firefox": "node scripts/build.js firefox",
+    "build:safari": "node scripts/build.js safari",
+    "clean": "rm -rf dist/*"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.57.0",
+    "tailwindcss": "^3.4.0"
+  },
+  "author": "Today is Life GmbH",
+  "license": "MIT"
+}

@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Test results
+test-results/
+playwright-report/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Claude / AI
+.claude/
+.claude.json
+claude.md
+CLAUDE.md
+
+# Environment
+.env
+.env.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# Temporary files
+*.tmp
+*.temp
+
+# Internal docs (not for public)
+UI-UX-*.md
+STORE-LISTINGS.md

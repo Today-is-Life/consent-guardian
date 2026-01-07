@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="de" id="htmlRoot">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consent Guardian - Dashboard</title>
+  <link rel="stylesheet" href="../styles/output.css">
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+  <!-- Header -->
+  <header class="bg-white shadow-sm border-b border-gray-200">
+    <div class="max-w-6xl mx-auto px-4 py-4">
+      <div class="flex items-center justify-between">
+        <a href="#" id="logoHomeLink" class="flex items-center gap-3 hover:opacity-80 transition-opacity" title="Zurück zur Übersicht">
+          <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+            <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+            </svg>
+          </div>
+          <div>
+            <h1 class="text-xl font-bold text-gray-900">Consent Guardian</h1>
+            <p class="text-sm text-gray-500" data-i18n="headerSubtitle">Deine Cookie-Entscheidungen im Überblick</p>
+          </div>
+        </a>
+
+        <nav class="flex gap-2">
+          <button class="tab-btn active" data-tab="overview" data-i18n="tabOverview">Übersicht</button>
+          <button class="tab-btn" data-tab="network" data-i18n="tabNetwork">Netzwerk</button>
+          <button class="tab-btn" data-tab="history" data-i18n="tabHistory">Verlauf</button>
+          <button class="tab-btn" data-tab="settings" data-i18n="tabSettings">Einstellungen</button>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-6xl mx-auto px-4 py-8">
+    <!-- Overview Tab -->
+    <div id="tab-overview" class="tab-content">
+      <!-- Stats Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
+        <div class="card">
+          <div class="text-sm text-gray-500 mb-1">Gesamt</div>
+          <div class="text-3xl font-bold text-gray-900" id="totalConsents">0</div>
+        </div>
+        <div class="card bg-blue-50" data-i18n-title="visitedSitesTooltip" title="Cookie-Banner wurden auf diesen Seiten gefunden">
+          <div class="text-sm text-blue-600 mb-1" data-i18n="statsBannerFound">Banner gefunden</div>
+          <div class="text-3xl font-bold text-blue-700" id="totalDetected">0</div>
+          <div class="text-xs text-blue-600 mt-1" id="detectedPercent">0%</div>
+        </div>
+        <div class="card bg-green-50" title="Gut! Du hast alle Cookies abgelehnt - maximale Privatsphäre">
+          <div class="text-sm text-green-600 mb-1" data-i18n="statsRejected">Abgelehnt</div>
+          <div class="text-3xl font-bold text-green-700" id="totalReject">0</div>
+          <div class="text-xs text-green-600 mt-1" id="rejectPercent">0%</div>
+        </div>
+        <div class="card bg-yellow-50" title="Du hast nur bestimmte Cookies erlaubt">
+          <div class="text-sm text-yellow-600 mb-1" data-i18n="statsPartiallyAllowed">Teilweise erlaubt</div>
+          <div class="text-3xl font-bold text-yellow-700" id="totalCustom">0</div>
+          <div class="text-xs text-yellow-600 mt-1" id="customPercent">0%</div>
+        </div>
+        <div class="card bg-red-50" title="Achtung: Du hast alle Cookies akzeptiert - Websites können dich tracken">
+          <div class="text-sm text-red-600 mb-1" data-i18n="statsAcceptedAll">Alles akzeptiert</div>
+          <div class="text-3xl font-bold text-red-700" id="totalAccept">0</div>
+          <div class="text-xs text-red-600 mt-1" id="acceptPercent">0%</div>
+        </div>
+      </div>
+
+      <!-- Farben-Legende für Statistiken -->
+      <div class="text-xs text-gray-500 mb-6 flex items-center justify-center gap-4">
+        <span class="flex items-center gap-1"><span class="w-3 h-3 bg-green-500 rounded-full"></span> <span data-i18n="colorGreen">Grün = Gut für deine Privatsphäre</span></span>
+        <span class="flex items-center gap-1"><span class="w-3 h-3 bg-yellow-500 rounded-full"></span> <span data-i18n="colorYellow">Gelb = Teilweise geschützt</span></span>
+        <span class="flex items-center gap-1"><span class="w-3 h-3 bg-red-500 rounded-full"></span> <span data-i18n="colorRed">Rot = Mehr Tracking erlaubt</span></span>
+      </div>
+
+      <!-- Manipulationstricks Stats - KLICKBAR -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div class="card cursor-pointer hover:shadow-lg transition-shadow" id="darkPatternCard" title="Klicken für Details zu den erkannten Tricks">
+          <div class="flex items-center justify-between mb-2">
+            <h2 class="text-lg font-semibold text-gray-900">Manipulationstricks</h2>
+            <svg class="w-5 h-5 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </div>
+          <div class="text-xs text-gray-400 mb-2">(unfaire Cookie-Banner-Tricks)</div>
+          <div class="flex items-center gap-4">
+            <div class="text-4xl font-bold text-red-600" id="darkPatternCount">0</div>
+            <div class="text-gray-500">
+              erkannte Tricks<br>auf Websites
+            </div>
+          </div>
+          <div class="mt-4 pt-4 border-t border-gray-100">
+            <div class="text-sm text-gray-500 flex items-center gap-2">
+              Manipulations-Score:
+              <span class="font-medium text-gray-700" id="avgScore">0</span>/100
+              <span id="avgScoreBadge" class="text-xs px-2 py-0.5 rounded bg-green-100 text-green-700">Sehr gut</span>
+            </div>
+            <div class="text-xs text-gray-400 mt-1">
+              0 = Keine Tricks | 100 = Stark manipulativ
+            </div>
+          </div>
+        </div>
+
+        <div class="card cursor-pointer hover:shadow-lg transition-shadow" id="domainsCard" title="Klicken für Liste aller besuchten Websites">
+          <div class="flex items-center justify-between mb-2">
+            <h2 class="text-lg font-semibold text-gray-900">Besuchte Seiten</h2>
+            <svg class="w-5 h-5 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </div>
+          <div class="text-xs text-gray-400 mb-2">(mit Cookie-Banner)</div>
+          <div class="flex items-center gap-4">
+            <div class="text-4xl font-bold text-blue-600" id="domainCount">0</div>
+            <div class="text-gray-500">
+              verschiedene<br>Websites
+            </div>
+          </div>
+          <div class="mt-4 pt-4 border-t border-gray-100">
+            <div class="text-sm text-gray-500">
+              Zuletzt besucht: <span class="font-medium text-gray-700" id="lastAnalysis">-</span>
+            </div>
+            <div class="text-xs text-gray-400 mt-1">
+              Hier siehst du alle Websites mit Cookie-Abfragen
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Manipulationstricks Detail Panel (versteckt) -->
+      <div id="darkPatternDetail" class="card mb-8 hidden">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-lg font-semibold text-gray-900">Was sind Manipulationstricks?</h2>
+          <button id="closeDarkPatternDetail" class="text-gray-400 hover:text-gray-600">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Erklärung -->
+        <div class="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-6">
+          <div class="flex gap-3">
+            <span class="text-2xl">⚠️</span>
+            <div>
+              <div class="font-medium text-amber-800 mb-1">Manipulationstricks bei Cookie-Bannern</div>
+              <div class="text-sm text-amber-700">
+                Websites nutzen psychologische Tricks, um dich dazu zu bringen, mehr Cookies zu akzeptieren als du eigentlich willst.
+                Zum Beispiel: Der "Alle akzeptieren"-Button ist groß und bunt, der "Ablehnen"-Button ist versteckt und grau.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Score Erklärung -->
+        <div class="mb-6">
+          <h3 class="font-medium text-gray-800 mb-3">Was bedeutet der Score?</h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div class="bg-green-50 border border-green-200 rounded-lg p-3 text-center">
+              <div class="text-2xl font-bold text-green-600">0-25</div>
+              <div class="text-sm text-green-700 font-medium">Fair</div>
+              <div class="text-xs text-green-600 mt-1">Kaum Manipulationstricks</div>
+            </div>
+            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3 text-center">
+              <div class="text-2xl font-bold text-yellow-600">26-50</div>
+              <div class="text-sm text-yellow-700 font-medium">Fragwürdig</div>
+              <div class="text-xs text-yellow-600 mt-1">Einige Tricks erkannt</div>
+            </div>
+            <div class="bg-red-50 border border-red-200 rounded-lg p-3 text-center">
+              <div class="text-2xl font-bold text-red-600">51-100</div>
+              <div class="text-sm text-red-700 font-medium">Manipulativ</div>
+              <div class="text-xs text-red-600 mt-1">Stark manipulatives Design</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Erkannte Pattern-Typen -->
+        <div class="mb-6">
+          <h3 class="font-medium text-gray-800 mb-3">Erkannte Manipulationstricks</h3>
+          <div id="patternTypeList" class="space-y-2">
+            <p class="text-gray-500 text-sm">Noch keine Patterns erkannt.</p>
+          </div>
+        </div>
+
+        <!-- Websites mit höchstem Score -->
+        <div>
+          <h3 class="font-medium text-gray-800 mb-3">Websites mit den meisten Tricks</h3>
+          <div id="worstOffenders" class="space-y-2">
+            <p class="text-gray-500 text-sm">Noch keine Daten vorhanden.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Domains Detail Panel (versteckt) -->
+      <div id="domainsDetail" class="card mb-8 hidden">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-lg font-semibold text-gray-900">Alle besuchten Websites</h2>
+          <button id="closeDomainsDetail" class="text-gray-400 hover:text-gray-600">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Erklärung -->
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+          <div class="flex gap-3">
+            <span class="text-2xl">🔍</span>
+            <div>
+              <div class="font-medium text-blue-800 mb-1">Diese Websites hast du besucht</div>
+              <div class="text-sm text-blue-700">
+                Jedes Mal wenn du eine Website mit Cookie-Banner besuchst, analysieren wir automatisch, wie fair oder manipulativ das Banner gestaltet ist.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Domain-Liste -->
+        <div class="mb-4">
+          <input type="text" id="searchDomains" placeholder="Domain suchen..."
+                 class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+        </div>
+
+        <div id="domainsList" class="space-y-2 max-h-96 overflow-y-auto">
+          <p class="text-gray-500 text-sm text-center py-4">Noch keine Websites analysiert.</p>
+        </div>
+      </div>
+
+      <!-- Recent Activity -->
+      <div class="card">
+        <h2 class="text-lg font-semibold text-gray-900 mb-4">Letzte Aktivität</h2>
+        <div id="recentActivity" class="space-y-3">
+          <p class="text-gray-500 text-center py-4">Keine Aktivität vorhanden</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Network Tab -->
+    <div id="tab-network" class="tab-content hidden">
+      <!-- Einführung für neue User -->
+      <div class="card mb-6 bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
+        <div class="flex gap-4">
+          <span class="text-3xl">🔍</span>
+          <div>
+            <h2 class="font-bold text-gray-900 mb-2">Was passiert im Hintergrund?</h2>
+            <p class="text-gray-700 text-sm">
+              Wenn du eine Website besuchst, lädt dein Browser nicht nur die Seite selbst, sondern kontaktiert
+              oft dutzende weitere Server. Manche davon sind harmlos (Bilder, Schriften), aber viele
+              <strong>verfolgen dich quer durchs Internet</strong>, um Profile über dich zu erstellen.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab-Navigation innerhalb Network -->
+      <div class="flex gap-2 mb-6">
+        <button class="network-subtab active px-4 py-2 rounded-lg text-sm font-medium" data-subtab="pages" title="Jede besuchte Seite einzeln anschauen">
+          📄 Einzelne Seiten
+        </button>
+        <button class="network-subtab px-4 py-2 rounded-lg text-sm font-medium" data-subtab="summary" title="Alle Daten zusammengefasst">
+          📊 Alle zusammen
+        </button>
+      </div>
+
+      <!-- SUB-TAB: Besuchte Seiten (NEU) -->
+      <div id="subtab-pages" class="network-subtab-content">
+        <div class="card mb-6">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-semibold text-gray-900">Deine besuchten Seiten</h2>
+            <span class="text-xs text-gray-500" id="pagesCount">0 Seiten erfasst</span>
+          </div>
+
+          <div class="mb-4">
+            <input type="text" id="searchPages" placeholder="Seite suchen..."
+                   class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+          </div>
+
+          <div id="pagesList" class="space-y-2 max-h-[500px] overflow-y-auto">
+            <div class="text-center py-8 text-gray-500">
+              <div class="text-4xl mb-4">🌐</div>
+              <p class="font-medium">Du hast noch keine Websites besucht</p>
+              <p class="text-sm mt-2 max-w-md mx-auto">
+                Surfe einfach normal weiter - wir zeigen dir automatisch, welche externen Dienste
+                (Werbung, Tracker, etc.) die Websites kontaktieren.
+              </p>
+              <p class="text-xs text-gray-400 mt-4">
+                Tipp: Besuche eine beliebige Website und komme dann hierher zurück.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUB-TAB: Gesamtübersicht (bisherige Zusammenfassung) -->
+      <div id="subtab-summary" class="network-subtab-content hidden">
+        <!-- Info-Box: Das sind aggregierte Daten -->
+        <div class="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-6">
+          <div class="flex gap-2 items-start">
+            <span class="text-lg">⚠️</span>
+            <div class="text-sm text-amber-800">
+              <strong>Hinweis:</strong> Diese Übersicht zeigt die <strong>Summe aller Tracker</strong> von allen besuchten Seiten.
+              Für Details zu einer einzelnen Seite, wechsle zu "Besuchte Seiten".
+            </div>
+          </div>
+        </div>
+
+        <!-- Zusammenfassung für normale User -->
+        <div id="networkSummary" class="card mb-6">
+          <div class="text-center py-8 text-gray-500">
+            <div class="text-4xl mb-4">🔍</div>
+            <p class="font-medium">Noch keine Daten gesammelt</p>
+            <p class="text-sm mt-2">Besuche einige Websites und komme dann hierher zurück.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detail-Ansicht für einzelne Seite (wird dynamisch eingeblendet) -->
+      <div id="pageDetailView" class="card mb-6 hidden">
+        <div class="flex items-center justify-between mb-4">
+          <button id="backToPagesList" class="flex items-center gap-2 text-blue-600 hover:text-blue-800">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            </svg>
+            Zurück zur Liste
+          </button>
+          <span id="pageDetailTime" class="text-xs text-gray-400"></span>
+        </div>
+
+        <div class="mb-4">
+          <h2 class="text-lg font-bold text-gray-900" id="pageDetailUrl"></h2>
+          <div class="flex items-center gap-4 mt-2">
+            <span id="pageDetailScore" class="text-sm font-medium px-2 py-1 rounded"></span>
+            <span id="pageDetailTrackerCount" class="text-sm text-gray-500"></span>
+          </div>
+        </div>
+
+        <!-- Risiko-Einschätzung für diese Seite -->
+        <div id="pageDetailRisk" class="p-4 rounded-lg mb-4"></div>
+
+        <!-- Tracker-Liste für diese Seite -->
+        <div class="mb-4">
+          <h3 class="font-medium text-gray-800 mb-3">Was diese Seite kontaktiert hat:</h3>
+          <div id="pageDetailTrackers" class="space-y-2"></div>
+        </div>
+
+        <!-- Quick Actions: Cookie-Einstellungen & Datenschutz -->
+        <div id="pageDetailLinks" class="mb-4 hidden">
+          <h3 class="font-medium text-gray-800 mb-3">Schnellzugriff für diese Seite:</h3>
+          <div class="flex flex-wrap gap-2">
+            <a id="pageDetailGdprLink" href="#" target="_blank" class="hidden inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+              Cookie-Einstellungen
+            </a>
+            <a id="pageDetailPrivacyLink" href="#" target="_blank" class="hidden inline-flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 text-sm font-medium">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+              </svg>
+              Datenschutzerklärung
+            </a>
+          </div>
+          <div id="pageDetailCmpInfo" class="text-xs text-gray-500 mt-2 hidden"></div>
+        </div>
+
+        <!-- Empfehlung -->
+        <div id="pageDetailAdvice" class="p-4 bg-blue-50 rounded-lg text-sm text-blue-800"></div>
+      </div>
+
+      <!-- Bewertungs-Legende -->
+      <div class="card mb-6">
+        <h3 class="font-semibold text-gray-900 mb-3">So liest du die Ergebnisse</h3>
+
+        <div class="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-4">
+          <div class="flex gap-3">
+            <span class="text-xl">💡</span>
+            <div class="text-sm text-amber-800">
+              <strong>Worauf solltest du achten?</strong> Vor allem auf <span class="text-red-600 font-medium">Werbe-Tracker</span> und
+              <span class="text-blue-600 font-medium">Social-Media-Verbindungen</span> - diese erstellen Profile über dich.
+              Analyse-Dienste sind weniger kritisch, technische Dienste sind harmlos.
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+          <div class="p-3 bg-red-50 rounded-lg border border-red-100">
+            <div class="flex items-start gap-2">
+              <span class="text-xl">🔴</span>
+              <div>
+                <div class="font-medium text-red-800">Werbe-Tracker <span class="text-xs bg-red-200 text-red-700 px-1 rounded">KRITISCH</span></div>
+                <div class="text-red-700 text-xs mt-1">
+                  Erstellen ein Profil über deine Interessen. Folgen dir von Website zu Website.
+                  <strong>Du solltest diese ablehnen!</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="p-3 bg-blue-50 rounded-lg border border-blue-100">
+            <div class="flex items-start gap-2">
+              <span class="text-xl">🔵</span>
+              <div>
+                <div class="font-medium text-blue-800">Social Media <span class="text-xs bg-blue-200 text-blue-700 px-1 rounded">KRITISCH</span></div>
+                <div class="text-blue-700 text-xs mt-1">
+                  Facebook, Twitter etc. erfahren, welche Seiten du besuchst - auch wenn du dort nicht eingeloggt bist!
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="p-3 bg-yellow-50 rounded-lg border border-yellow-100">
+            <div class="flex items-start gap-2">
+              <span class="text-xl">🟡</span>
+              <div>
+                <div class="font-medium text-yellow-800">Analyse-Dienste <span class="text-xs bg-yellow-200 text-yellow-700 px-1 rounded">BEOBACHTEND</span></div>
+                <div class="text-yellow-700 text-xs mt-1">
+                  Messen, wie du die Seite nutzt (Klicks, Scrollverhalten). Meist nur auf dieser einen Website aktiv.
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="p-3 bg-green-50 rounded-lg border border-green-100">
+            <div class="flex items-start gap-2">
+              <span class="text-xl">🟢</span>
+              <div>
+                <div class="font-medium text-green-800">Technisch notwendig <span class="text-xs bg-green-200 text-green-700 px-1 rounded">HARMLOS</span></div>
+                <div class="text-green-700 text-xs mt-1">
+                  Bilder, Schriftarten, Videos von anderen Servern. Sammeln keine Daten über dich. Harmlos.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4 p-3 bg-gray-50 rounded-lg text-sm text-gray-600">
+          <strong>Ist das schlimm?</strong> Das hängt von dir ab. Wenn du nicht willst, dass Unternehmen wissen,
+          welche Websites du besuchst und was dich interessiert, solltest du Tracking ablehnen.
+          Die meisten Websites funktionieren auch ohne Tracking-Cookies.
+        </div>
+      </div>
+
+      <!-- Detailansicht (aufklappbar) -->
+      <details class="card">
+        <summary class="font-semibold text-gray-900 cursor-pointer">
+          Technische Details anzeigen
+        </summary>
+
+        <div class="mt-4 pt-4 border-t border-gray-100">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex gap-2">
+              <input type="text" id="searchRequests" placeholder="Domain suchen..."
+                     class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+              <select id="filterCategory" class="px-3 py-2 border border-gray-300 rounded-lg text-sm">
+                <option value="all">Alle Kategorien</option>
+                <option value="advertising">🔴 Werbung</option>
+                <option value="analytics">🟡 Analyse</option>
+                <option value="social">🔵 Social Media</option>
+                <option value="cdn">🟢 Technisch</option>
+                <option value="functional">🟢 Notwendig</option>
+                <option value="unknown">⚪ Unbekannt</option>
+              </select>
+            </div>
+            <button id="clearRequests" class="text-sm text-red-600 hover:text-red-800">
+              Daten löschen
+            </button>
+          </div>
+
+          <div id="requestList" class="space-y-2 max-h-96 overflow-y-auto">
+            <p class="text-gray-500 text-center py-4">Keine Daten vorhanden</p>
+          </div>
+
+          <div class="text-xs text-gray-400 mt-4">
+            <span id="requestCount">0</span> externe Dienste erfasst
+          </div>
+        </div>
+      </details>
+    </div>
+
+    <!-- History Tab -->
+    <div id="tab-history" class="tab-content hidden">
+      <div class="card">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-lg font-semibold text-gray-900">Dein Cookie-Verlauf</h2>
+          <div class="flex gap-2">
+            <input type="text" id="searchHistory" placeholder="Website suchen..."
+                   class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            <select id="filterType" class="px-3 py-2 border border-gray-300 rounded-lg text-sm" title="Nach Art der Entscheidung filtern">
+              <option value="all">Alle Entscheidungen</option>
+              <option value="detected">Banner gefunden</option>
+              <option value="accept_all">Alles akzeptiert</option>
+              <option value="reject_all">Alles abgelehnt</option>
+              <option value="custom">Teilweise erlaubt</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Erklärung -->
+        <div class="text-xs text-gray-500 mb-4 flex items-center gap-2">
+          <span>💡</span>
+          <span>Hier siehst du alle Websites, auf denen du Cookie-Entscheidungen getroffen hast.</span>
+        </div>
+
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Website</th>
+              <th>Deine Entscheidung</th>
+              <th title="Anzahl erkannter Manipulationstricks">Tricks</th>
+              <th>Wann</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="historyTable">
+            <tr>
+              <td colspan="5" class="text-center text-gray-500 py-8">
+                <div class="text-3xl mb-2">📋</div>
+                <p class="font-medium">Noch keine Einträge</p>
+                <p class="text-sm mt-1">Besuche Websites mit Cookie-Bannern - deine Entscheidungen erscheinen dann hier.</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Settings Tab -->
+    <div id="tab-settings" class="tab-content hidden">
+      <div class="max-w-2xl">
+        <div class="card mb-6">
+          <h2 class="text-lg font-semibold text-gray-900 mb-4">Einstellungen</h2>
+
+          <div class="space-y-4">
+            <label class="flex items-center justify-between">
+              <div>
+                <div class="font-medium text-gray-700">Automatische Analyse</div>
+                <div class="text-sm text-gray-500">Seiten automatisch auf Cookie-Banner prüfen</div>
+              </div>
+              <input type="checkbox" id="settingAutoAnalyze" class="w-5 h-5 text-blue-600 rounded">
+            </label>
+
+            <label class="flex items-center justify-between" title="Zeigt eine Warnung wenn eine Website dich mit Tricks manipulieren will">
+              <div>
+                <div class="font-medium text-gray-700">Warnungen bei Manipulationstricks</div>
+                <div class="text-sm text-gray-500">Warnen wenn Websites unfaire Cookie-Banner verwenden</div>
+              </div>
+              <input type="checkbox" id="settingWarnings" class="w-5 h-5 text-blue-600 rounded">
+            </label>
+
+            <label class="flex items-center justify-between">
+              <div>
+                <div class="font-medium text-gray-700">Benachrichtigungen</div>
+                <div class="text-sm text-gray-500">Browser-Benachrichtigungen bei Consent</div>
+              </div>
+              <input type="checkbox" id="settingNotifications" class="w-5 h-5 text-blue-600 rounded">
+            </label>
+
+            <label class="flex items-center justify-between" title="Zeigt dir welche externen Dienste (Tracker, Werbung, etc.) Websites kontaktieren">
+              <div>
+                <div class="font-medium text-gray-700">Externe Verbindungen überwachen</div>
+                <div class="text-sm text-gray-500">Zeigen welche externen Dienste Websites kontaktieren</div>
+              </div>
+              <input type="checkbox" id="settingTrackRequests" class="w-5 h-5 text-blue-600 rounded">
+            </label>
+          </div>
+        </div>
+
+        <div class="card mb-6">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-semibold text-gray-900">Erweiterter Modus</h2>
+            <span class="px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded" title="Aktuell kostenlos verfügbar">Kostenlos</span>
+          </div>
+
+          <div class="space-y-4">
+            <label class="flex items-center justify-between" title="Schaltet zusätzliche Funktionen frei - aktuell komplett kostenlos!">
+              <div>
+                <div class="font-medium text-gray-700">Erweiterte Funktionen aktivieren</div>
+                <div class="text-sm text-gray-500">Mehr Details und unbegrenzte Historie</div>
+              </div>
+              <input type="checkbox" id="settingProMode" class="w-5 h-5 text-purple-600 rounded">
+            </label>
+
+            <div class="text-xs text-gray-500 bg-gray-50 p-3 rounded-lg">
+              <strong>Was du bekommst:</strong> Detaillierte Verbindungsansicht, unbegrenzte Historie, erweiterte Erklärungen zu externen Diensten, Daten-Export
+            </div>
+          </div>
+        </div>
+
+        <div class="card mb-6">
+          <h2 class="text-lg font-semibold text-gray-900 mb-4">Daten</h2>
+
+          <div class="space-y-3">
+            <button id="exportData" class="btn btn-secondary w-full" title="Speichert alle deine Daten als Datei auf deinem Computer">
+              Daten als Datei speichern
+            </button>
+            <button id="importData" class="btn btn-secondary w-full">
+              Daten importieren
+            </button>
+            <button id="clearData" class="btn btn-danger w-full">
+              Alle Daten löschen
+            </button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2 class="text-lg font-semibold text-gray-900 mb-4">Über Consent Guardian</h2>
+          <p class="text-gray-600 text-sm">
+            Version 1.0.0<br>
+            Ein Tool zur Transparenz und Kontrolle über deine Cookie-Entscheidungen.
+          </p>
+          <div class="mt-4 pt-4 border-t border-gray-100">
+            <p class="text-sm text-gray-600 mb-2">Hast du Feedback oder einen Fehler gefunden?</p>
+            <a href="mailto:feedback@consent-guardian.de" class="text-sm text-blue-600 hover:text-blue-800">
+              feedback@consent-guardian.de
+            </a>
+          </div>
+          <p class="text-gray-400 text-xs mt-4">
+            Made with care for your Privacy
+          </p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="../lib/browser-api.js"></script>
+  <script src="../lib/tracker-db.js"></script>
+  <script src="../lib/i18n.js"></script>
+  <script src="dashboard.js"></script>
+</body>
+</html>
